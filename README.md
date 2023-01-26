@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Spring MVC Project
 
 This is a basic Spring MVC project that demonstrates how to create a simple CRUD API's in web application using Spring MVC.
@@ -49,3 +50,6 @@ The following endpoints are available for the CRUD operations:
 Spring Mvc directly not support @autowired, So for that we required
 1. In the spring-mvc-servlet.xml file, the <context:annotation-config/> and <context:component-scan/> tags are used to enable annotation-based configuration and to scan for components in the com.springmvc.* package and its subpackages, respectively.
 2. The web.xml file configure the spring framework to load the spring-mvc-servlet.xml file at the time of application startup.
+=======
+# spring_crud_mvc
+>>>>>>> a72b93b91656a44127e07fe025a7fc6b5795660c
