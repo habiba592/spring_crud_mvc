@@ -1,5 +1,4 @@
 package com.springmvc.controller;
-
 import com.springmvc.exception.ResourceNotFoundException;
 import com.springmvc.model.User;
 
@@ -24,17 +23,29 @@ public class UserController {
     private UserSerive userSerive;
 
 
+
     @PostMapping("/user")
-    public UserToken login(@RequestParam("username") String name, @RequestParam("password") String password) {
+    public UserToken login(@RequestParam("name") String name, @RequestParam("password") String password) {
 
         String token = getJWTToken(name);
         UserToken user = new UserToken();
+        User userr = new User();
 
-        user.setUsername(name);
-        user.setToken(token);
-        return user;
+        User users=userSerive.findByUserNameAndPassword(name, password);
+        if(users!=null)
+        {
+            user.setUsername(name);
+            user.setPassword(password);
+            user.setToken(token);
+            return user;
+        }
+        else
+        {
+            return null;
+        }
 
     }
+
 
     private String getJWTToken(String username) {
         String secretKey = "mySecretKey";

@@ -1,5 +1,6 @@
 package config;
 
+import com.springmvc.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
@@ -8,6 +9,7 @@ import org.springframework.http.MediaType;
 
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -106,4 +108,6 @@ public class mvcConfig extends WebMvcConfigurerAdapter {
         tm.setEntityManagerFactory(entityManagerFactory);
         return tm;
     }
+
+
 }

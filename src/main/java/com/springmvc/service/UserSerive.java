@@ -3,6 +3,7 @@ package com.springmvc.service;
 import com.springmvc.exception.ResourceNotFoundException;
 import com.springmvc.model.User;
 
+import com.springmvc.model.UserToken;
 import com.springmvc.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,20 @@ public class UserSerive {
         userRepository.deleteById(theId);
     }
 
+   public User findByUserNameAndPassword(String name, String password){
+       User user = new User();
+       user=  userRepository.findByNameAndPassword( name, password);
 
+
+       if (user != null) {
+
+           return user;
+
+       } else {
+
+           return null;
+       }
+   }
 
 }
 
