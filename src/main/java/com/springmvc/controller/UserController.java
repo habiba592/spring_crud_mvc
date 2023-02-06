@@ -1,45 +1,87 @@
 package com.springmvc.controller;
 
+import com.springmvc.exception.ResourceNotFoundException;
 import com.springmvc.model.User;
 
+import com.springmvc.model.UserToken;
 import com.springmvc.service.UserSerive;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
 public class UserController {
 
     @Autowired
-    private UserSerive serive;
+    private UserSerive userSerive;
+
+
+    @PostMapping("/user")
+    public UserToken login(@RequestParam("username") String name, @RequestParam("password") String password) {
+
+        String token = getJWTToken(name);
+        UserToken user = new UserToken();
+
+        user.setUsername(name);
+        user.setToken(token);
+        return user;
+
+    }
+
+    private String getJWTToken(String username) {
+        String secretKey = "mySecretKey";
+        List<GrantedAuthority> grantedAuthorities = AuthorityUtils
+                .commaSeparatedStringToAuthorityList("ROLE_USER");
+
+        String token = Jwts
+                .builder()
+                .setId("softtekJWT")
+                .setSubject(username)
+                .claim("authorities",
+                        grantedAuthorities.stream()
+                                .map(GrantedAuthority::getAuthority)
+                                .collect(Collectors.toList()))
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 600000))
+                .signWith(SignatureAlgorithm.HS512,
+                        secretKey.getBytes()).compact();
+
+        return "Bearer " + token;
+    }
 
     @GetMapping(value = "/getAllUsers")
     public List<User> getAllUsers() {
-        return serive.getAllUsers();
+        return userSerive.getAllUsers();
     }
 
     @GetMapping(value = "/getUserById/{id}")
-    public User getUserById(@PathVariable int id) {
-       return serive.getUserById(id);
+    public User getUserById(@PathVariable int id) throws ResourceNotFoundException {
+       return userSerive.getUserById(id);
     }
 
     @PostMapping(value = "/addUser")
-            public List addUser(@RequestBody User user) {
-         return serive.addUser(user);
+            public User addUser(@RequestBody User user) {
+
+         return userSerive.saveUser(user);
     }
 
-    @PutMapping(value = "/updateUser/{id}")
+   /* @PutMapping(value = "/updateUser/{id}")
             public User updateUser(@PathVariable int id, @RequestBody User user) {
 
-        return serive.updateUser(id, user);
-    }
+        return userSerive.u(id, user);
+    }*/
 
-    @DeleteMapping(value = "/deleteUser/{id}")
-            public void deleteUser(@PathVariable int id) {
-       serive.deleteUser(id);
+    @DeleteMapping(value = "/deleteUserById/{id}")
+            public void deleteUserById(@PathVariable int id) {
+       userSerive.deleteUserById(id);
     }
 
 }
