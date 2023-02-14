@@ -13,48 +13,18 @@ import java.util.List;
 
 
 
-@Service
-public class UserSerive {
 
-    @Autowired
-    private UserRepository userRepository;
+public interface UserSerive<T> {
+    public List <T> getAllUsers();
 
+    public T saveUser(T entity);
 
-
-    public List <User> getAllUsers() {
-        return userRepository.findAll();
-    }
+    public T getUserById(int id);
 
 
-    public User saveUser(User user) {
-        return userRepository.save(user);
-    }
+    public void deleteUserById(int theId);
 
-
-    public User getUserById(int id) throws ResourceNotFoundException {
-        return userRepository.findById(id).orElseThrow(
-                ()-> new ResourceNotFoundException(id));
-    }
-
-
-    public void deleteUserById(int theId) {
-        userRepository.deleteById(theId);
-    }
-
-   public User findByUserNameAndPassword(String name, String password){
-       User user = new User();
-       user=  userRepository.findByNameAndPassword( name, password);
-
-
-       if (user != null) {
-
-           return user;
-
-       } else {
-
-           return null;
-       }
-   }
+   public T findByUserNameAndPassword(String name, String password);
 
 }
 

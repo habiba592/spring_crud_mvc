@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class UserController {
 
     @Autowired
-    private UserSerive userSerive;
+    private UserSerive<User> userSerive;
 
 
 

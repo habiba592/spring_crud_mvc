@@ -25,6 +25,26 @@ public class User  {
 
     @Column(nullable = false)
     private String password;
+    @Column(nullable = false)
+    private byte[] salt;
+    @Column(nullable = false)
+    private String hashedPassword;
+
+    public byte[] getSalt() {
+        return salt;
+    }
+
+    public String getHashedPassword() {
+        return hashedPassword;
+    }
+
+    public void setHashedPassword(String hashedPassword) {
+        this.hashedPassword = hashedPassword;
+    }
+
+    public void setSalt(byte[] salt) {
+        this.salt = salt;
+    }
 
     public String getEmail() {
         return email;

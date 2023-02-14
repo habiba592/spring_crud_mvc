@@ -1,15 +1,10 @@
 package config;
-
-import com.springmvc.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.http.MediaType;
-
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -19,11 +14,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
-
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.util.Properties;
@@ -37,7 +30,7 @@ import java.util.Properties;
 @PropertySource("classpath:application.properties")
 public class mvcConfig extends WebMvcConfigurerAdapter {
 
-    @Autowired
+    @Autowired//Can we used it other places:
     private Environment environment;
     @Override
     public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
@@ -80,7 +73,7 @@ public class mvcConfig extends WebMvcConfigurerAdapter {
 
 
 
-    @Bean
+    @Bean//differece of Hikari Connection Pool and driver
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(environment.getRequiredProperty("jdbc.driverClassName"));
@@ -93,7 +86,7 @@ public class mvcConfig extends WebMvcConfigurerAdapter {
         return dataSource;
     }
 
-    @Bean
+    @Bean //bean vs Obj
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
         emf.setDataSource(dataSource());
@@ -107,6 +100,12 @@ public class mvcConfig extends WebMvcConfigurerAdapter {
         JpaTransactionManager tm = new JpaTransactionManager();
         tm.setEntityManagerFactory(entityManagerFactory);
         return tm;
+    }
+
+    //For Secure Utils Class
+    @Bean
+    public SecureUtils secureUtils() {
+        return new SecureUtils();
     }
 
 
